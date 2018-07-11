@@ -24,7 +24,9 @@ class DBGcmd
         }
         catch (Exception ex)
         {
-           
+            string Error = ex.Message + "  " + DateTime.Now;
+            System.IO.File.WriteAllText(@"C:\Users\Fullen\Desktop\DBGcmd\DBGcmd\log.txt", Error);
+            Console.ReadKey();
         }
            
 
