@@ -54,10 +54,20 @@ class DBGcmd
         port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
 
         Console.WriteLine("We are waiting for the device");
+        while (port.IsOpen) { 
 
-        Console.WriteLine("If you want to exit, please, press any buttom");
-        Console.ReadKey();
-        port.Close();
+        Console.WriteLine("If you want to exit, please, type 'QUIT' or write message to the device");
+        string message = Console.ReadLine();
+        if (message == "QUIT")
+        {
+            port.Close();
+        }
+        else
+            {
+                port.WriteLine(message);
+            }
+        }
+
     }
 
 
