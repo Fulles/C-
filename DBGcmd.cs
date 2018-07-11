@@ -56,7 +56,7 @@ class DBGcmd
         Console.WriteLine("We are waiting for the device");
         while (port.IsOpen) { 
 
-        Console.WriteLine("If you want to exit, please, type 'QUIT' or write message to the device");
+        Console.WriteLine("If you want to exit, please, type 'QUIT' or make a request");
         string message = Console.ReadLine();
         if (message == "QUIT")
         {
