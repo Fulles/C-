@@ -1,11 +1,12 @@
-﻿using System;
+using System;
 using System.IO.Ports; //Nuget System.IO.Ports
+
 
 class DBGcmd
 {
     public static void Main()
     {
-        string name;
+        
         string[] ports = SerialPort.GetPortNames();
 
         Console.WriteLine("The following serial ports were found:");
@@ -14,32 +15,51 @@ class DBGcmd
         {
             Console.WriteLine(port);
         }
-        Console.WriteLine("Choose a port to connect for the device(COM2)");
-        case1:
-        name = Console.ReadLine();
-        name = name.ToUpper();
-        if (Array.IndexOf(ports, name) >= 0)
+        try
         {
+            string name = ChooseName();
             SerialPort Port = new SerialPort(name);
-            Port.Open();
-            Console.WriteLine("The port " + name + " is open for device");
-            Port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
-            Port.WriteLine("halo");
-            Console.WriteLine("We are waiting for the device");
-            
-            Console.WriteLine("If you want to exit, please, press any buttom");
-            Console.ReadKey();
-            Port.Close();
-
+            PortIsOn(Port);
+           
         }
-        else
+        catch (Exception ex)
+        {
+           
+        }
+           
+
+    }
+
+
+    private static string ChooseName()
+    {
+        string[] ports = SerialPort.GetPortNames();
+        Console.WriteLine("Choose a port to connect for the device(COM2)");
+        string name = Console.ReadLine();
+        name = name.ToUpper();
+
+        while (!Array.Exists(ports, element => element == name))
         {
             Console.WriteLine("Choose correct name (for ex. com1, com2, etc.)");
-            goto case1;
+            name = Console.ReadLine();
+            name = name.ToUpper();
         }
-        
-        
+
+        return name;
     }
+
+   private static void PortIsOn (SerialPort port)
+    {
+        port.Open();
+        port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
+
+        Console.WriteLine("We are waiting for the device");
+
+        Console.WriteLine("If you want to exit, please, press any buttom");
+        Console.ReadKey();
+        port.Close();
+    }
+
 
     private static void DataReceivedHandler(
                         object sender,
@@ -51,14 +71,14 @@ class DBGcmd
         string indata = sp.ReadExisting();
         Console.WriteLine("Data Received:");
         Console.Write(indata);
-        
-        
+
+
         if (indata.Contains(start))
         {
             Console.WriteLine("We're connected");
             sp.WriteLine(request);
         }
-      
+
     }
-   
+
 }
