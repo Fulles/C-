@@ -31,7 +31,7 @@ class Emulator
         SerialPort sp = (SerialPort)sender;
         string indata = sp.ReadExisting();
         Console.WriteLine(indata);
-        while (count < 8)
+        while (count <= 8)
         {
             if (indata.Contains(requests[count]))
             {
